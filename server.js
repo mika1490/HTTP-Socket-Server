@@ -10,7 +10,7 @@ const server = net.createServer((socket) => {
 
   //socket can now retreive data
   socket.on('data', (data) => {
-    debugger;
+
     let dataString = data.toString()
 
     // function requestHandler(dataString) {
@@ -30,20 +30,51 @@ const server = net.createServer((socket) => {
     let date = new Date().toUTCString();
 
 
-    function serverResponse() {
+
 
     let responseHeader = `${responseHTTP} ${responseStatus}`;
 
     let response = `${responseHeader}
 Date: ${date}
-Server: ${responseServer}
+Server: ${responseServer}\n\n`
 
-${index}`;
-    console.log(response);
-    socket.write(response);
-    socket.end();
+    if (method === 'GET') {
+      switch (URI) {
+        case '/':
+          socket.write(response + index);
+          socket.end();
+          break;
+        case '/index.html':
+          socket.write(response + index);
+          socket.end();
+          break;
+        case '/hydrogen.html':
+          socket.write(response + hydrogen);
+          socket.end();
+          break;
+        case '/helium.html':
+          socket.write(response + helium);
+          socket.end();
+          break;
+        case '/404.html':
+          socket.write(response + html404);
+          socket.end();
+          break;
+        case '/css/styles.css':
+          socket.write(response + style);
+          socket.end();
+          break;
+      }
     }
-    console.log(serverResponse());
+
+    // `${index}`;
+    // console.log(response);
+    // socket.write(response);
+    // socket.end();
+
+
+
+    // console.log(serverResponse());
     // HTTP / 1.1 200 OK
     // Server: nginx / 1.4.6(Ubuntu)
     // host: lovalhost:8080
@@ -60,7 +91,7 @@ ${index}`;
     // Accept: text/html, application/json
     // Date: Wed, 8 Jul 2015 11:12:31 GMT
     // Content-Length:
-  })
+  }) //end of onData function
 
   socket.on('end', () => {
     console.log('Client Disconnected')
